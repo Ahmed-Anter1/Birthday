@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import User from './models/User.js';
 import authRoutes from './routes/auth.js';
 import mediaRoutes from './routes/media.js';
 import messageRoutes from './routes/messages.js';
@@ -12,7 +12,24 @@ import memoryRoutes from './routes/memories.js';
 import futureMessageRoutes from './routes/futureMessages.js';
 
 dotenv.config();
+const createAdmin = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB');
 
+    const admin = await User.create({
+      username: 'admin',
+      password: 'admin123',  // غيرها بعدين من الموقع
+      role: 'admin'
+    });
+
+    console.log('✅ Admin created:', admin.username);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+createAdmin();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
