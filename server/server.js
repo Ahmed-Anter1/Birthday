@@ -41,7 +41,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://frontend-domain.com' // حط دومين الفرونت لما تديبلوي
+    'https://birthday-sagt.vercel.app/' // حط دومين الفرونت لما تديبلوي
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
