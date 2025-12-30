@@ -1,4 +1,17 @@
+# netlify.toml
+# ضع هذا الملف في root المشروع (جنب مجلد client)
+
 [build]
   base = "client"
   command = "npm install && npm run build"
-  publish = "build"
+  publish = "client/build"
+
+[build.environment]
+  # متغيرات البيئة
+  NODE_VERSION = "18"
+  
+# Redirects للـ SPA (React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
