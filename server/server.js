@@ -22,7 +22,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    'https://birthday-sagt-i2dj0gxx4-ahmed-anters-projects.vercel.app'
+    'https://birthday-nm61-bi5qh2irk-ahmed-anters-projects.vercel.app/'
   ],
   credentials: true
 }));
