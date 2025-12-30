@@ -37,16 +37,24 @@ const app = express();
 
 // Middleware
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://birthday-sagt-i2dj0gxx4-ahmed-anters-projects.vercel.app'
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://birthday-sagt-i2dj0gxx4-ahmed-anters-projects.vercel.app' // حط دومين الفرونت لما تديبلوي
-  ],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // مهم للـ Postman
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
+
 
 app.options('*', cors()); // مهم جدًا
 
