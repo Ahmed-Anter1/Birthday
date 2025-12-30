@@ -4,7 +4,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import User from './models/User.js';
 import authRoutes from './routes/auth.js';
 import mediaRoutes from './routes/media.js';
 import messageRoutes from './routes/messages.js';
@@ -12,24 +11,6 @@ import memoryRoutes from './routes/memories.js';
 import futureMessageRoutes from './routes/futureMessages.js';
 
 dotenv.config();
-const createAdmin = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB');
-
-    const admin = await User.create({
-      username: 'admin',
-      password: 'admin123',  // غيرها بعدين من الموقع
-      role: 'admin'
-    });
-
-    console.log('✅ Admin created:', admin.username);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
-createAdmin();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -37,24 +18,31 @@ const app = express();
 
 // Middleware
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'https://birthday-sagt-i2dj0gxx4-ahmed-anters-projects.vercel.app'
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // مهم للـ Postman
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://birthday-sagt-i2dj0gxx4-ahmed-anters-projects.vercel.app'
+  ],
+  credentials: true
 }));
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.options('*', cors()); // مهم جدًا
 
