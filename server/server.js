@@ -36,10 +36,20 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // Middleware
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://frontend-domain.com' // حط دومين الفرونت لما تديبلوي
+  ],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
+app.options('*', cors()); // مهم جدًا
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
